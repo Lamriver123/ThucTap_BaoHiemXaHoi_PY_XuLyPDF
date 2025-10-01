@@ -15,11 +15,14 @@ def extract_table():
 
         with pdfplumber.open(file.stream) as pdf:
             for page_num, page in enumerate(pdf.pages, start=1):
+                row_start =0
+                if page_num == 1:
+                    row_start = 1
                 tables = page.extract_tables()
                 for table in tables:
                     if table:
                         # Bỏ qua header -> chỉ lấy các dòng từ index 1 trở đi
-                        for row in table[1:]:
+                        for row in table[row_start:]:
                             # Fix Unicode cho từng ô
                             fixed_row = [ftfy.fix_text(cell) if cell else "" for cell in row]
                             all_rows.append(fixed_row)
